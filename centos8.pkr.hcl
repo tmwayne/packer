@@ -6,6 +6,10 @@
 # Tyler Wayne © 2021
 #
 
+variable "ssh_username" { type = string }
+
+variable "ssh_private_key_file" { type = string }
+
 source "qemu" "centos8" {
   boot_command      = ["<tab> text ks=http:/{{ .HTTPIP }}:{{ .HTTPPort }}/centos8-ks.cfg<enter><wait>"]
   #disk_image        = "true"
@@ -32,7 +36,7 @@ source "qemu" "centos8" {
 build {
   sources = ["source.qemu.centos8"]
   # provisioner "ansible" {
-    # user            = "{build.user}" 
+    # user            = build.user 
     # playbook_file   = "./playbook.yaml"
   # }
 }
