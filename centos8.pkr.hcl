@@ -23,9 +23,9 @@ source "qemu" "centos8" {
   net_device        = "virtio-net"
   output_directory  = "./images/centos8-test"
   #ssh_password      = "centoslook"
-  ssh_private_key_file = "/home/tyler/.ssh/keys/centos"
+  ssh_private_key_file = var.ssh_private_key_file
   ssh_timeout       = "20m"
-  ssh_username      = "tyler"
+  ssh_username      = var.ssh_username
   vm_name           = "centos8-base.raw"
 }
 
