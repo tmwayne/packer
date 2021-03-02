@@ -1,6 +1,7 @@
 # Files
 
 # Directories
+.vagrant
 packer_cache
 isos
 images
