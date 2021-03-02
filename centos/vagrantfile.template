@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # tell vagrant not to replace default ssh key
+  # config.ssh.insert_key = false
+  config.vm.define :centos7 do |centos7|
+    centos7.vm.box = "centos7-base"
+    centos7.vm.box_url = "/home/tyler/data/boxes/centos/7/centos7-base.box"
+    centos7.vm.synced_folder "./", "/vagrant", disabled: true
+    centos7.ssh.username = "tyler"
+    centos7.ssh.private_key_path = "/home/tyler/.ssh/keys/centos"
+
+    centos7.vm.provider :libvirt do |libvirt|
+      libvirt.driver = "kvm"
+    end
+
+    centos7.vm.provider :libvirt do |domain|
+      domain.disk_bus = "virtio"
+      domain.nic_model_type = "virtio"
+      domain.machine_arch = "x86_64"
+      domain.memory = 2048
+      domain.cpus = 3
+      domain.graphics_type = "spice"
+    end
+  end
+end
