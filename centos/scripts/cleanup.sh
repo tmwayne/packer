@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 #
 # ------------------------------------------------------------------------------
 # Cleanup base box
@@ -6,15 +6,27 @@
 #
 
 # remove network mac and interface information
-sed -i '/HWADDR/d' /etc/sysconfig/network-scripts/ifcfg-eth0
-sed -i '/^UUID/d' /etc/sysconfig/network-scripts/ifcfg-eth0
+echo 'remove network mac' > /home/tyler/status.txt
+sed -i \
+  -e '/HWADDR/d' \
+  -e '/^UUID/d' \
+  /etc/sysconfig/network-scripts/ifcfg-eth0
 
+# disable reverse DNS lookups and password authentication
+# TODO: these are deleting the /etc/ssh/sshd_config files
+echo 'modify sshd_config' >> /home/tyler/status.txt
+sed --in-place='.bk' \
+  -e '/UseDNS/d' \
+  -e '/PasswordAuthentication/d' \
+  /etc/ssh/sshd_config
+echo 'UseDNS no' >> /etc/ssh/sshd_config
+echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
+
+echo 'remove extras' >> /home/tyler/status.txt
 # remove any ssh keys or persistent routes, dhcp leases
-rm -f /etc/ssh/ssh_host_*
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f /var/lib/dhclient/dhclient-eth0.leases
-rm -rf /tmp/*
-yum -y clean all
+# rm -rf /tmp/*
+# yum -y clean all
 
-# disable reverse DNS lookups on sshd
-sed -i 's/.*UseDNS.*/UseDNS no/' /etc/ssh/sshd_config
+systemctl restart sshd
