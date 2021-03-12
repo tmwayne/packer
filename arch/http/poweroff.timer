@@ -1,0 +1,14 @@
+#
+# ------------------------------------------------------------------------------
+# Shutdown timer for avoid race conditions
+# ------------------------------------------------------------------------------
+# 
+# github.com/elasticdog/packer-arch.git
+#
+
+[Unit]
+Description=Delayed poweroff
+
+[Timer]
+OnActiveSec=1
+Unit=poweroff.target
